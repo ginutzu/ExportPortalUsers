@@ -1,0 +1,16 @@
+import csv
+from arcgis.gis import GIS
+
+gis = GIS(portalUrl,username,password)
+
+outputFile = r"<output_file_path>"
+
+users = gis.users.search('*', max_users=1500)
+
+with open(outputFile,'w',newline='') as ResultFile:
+    wr=csv.writer(ResultFile)
+    header = 'Username,LicenseType,Email'
+    wr.writerow(header)
+    for user in users:
+        if not 'esri_' in user.username and user.userLicenseTypeId == 'viewerUT': #Filter esri_ built-in users and only includes viewer license types
+            wr.writerow(user.username,user.userLicenseTypeId,user.email)

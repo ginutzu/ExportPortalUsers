@@ -1,0 +1,17 @@
+# --- Output data: contains REAL personal data (names, emails). Never publish. ---
+portal_users.csv
+portal_users.xlsx
+portal_users.*
+
+# --- PyInstaller / build artifacts ---
+build/
+dist/
+*.spec
+
+# --- Python caches ---
+__pycache__/
+*.pyc
+
+# --- Temporary / preview files ---
+_preview.png
+_exe_icon.png
