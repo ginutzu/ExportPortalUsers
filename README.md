@@ -1,4 +1,4 @@
-# Export Portal Users – ANCPI
+# Export Portal Users
 
 Aplicație care extrage **lista completă a membrilor** dintr-un portal ArcGIS
 Enterprise și o salvează în format **CSV** și **Excel (.xlsx)**.
@@ -47,18 +47,18 @@ auto-filtru pe coloane și lățimi auto-ajustate.
   stătător, fără Python instalat.
 - Pentru rularea din sursă: **Python 3.9+** (testat pe 3.14.5) și pachetul
   `openpyxl` (instalat automat de `start.bat`).
-- Acces de rețea la portal: `https://gis.ancpi.ro/portal`.
+- Acces de rețea la portalul GIS ArcGIS Enterprise.
 - Un cont de portal cu drept de a lista membrii organizației.
 
 ---
 
 ## 3. Cum se rulează
 
-La pornire, aplicația cere interactiv patru informații (apasă **Enter** la
-oricare pentru a păstra valoarea implicită afișată în paranteze):
+La pornire, aplicația cere interactiv patru informații (toate obligatorii,
+fără valori implicite):
 
-1. **URL portal GIS** – ex. `https://gis.ancpi.ro/portal`
-2. **Utilizator (username)** – ex. `ginu.popescu`
+1. **URL portal GIS** – ex. `https://<portal>/portal`
+2. **Utilizator (username)**
 3. **Parola** – nu se afișează la tastare, rămâne doar în memorie
 4. **Calea de salvare** a fișierelor CSV și XLSX
 
@@ -99,7 +99,7 @@ python export_portal_users.py
 Parola **nu este stocată** în cod sau în fișiere.
 
 - **Implicit:** aplicația o cere interactiv la rulare
-  (`Password for ginu.popescu:`). Textul introdus este ascuns și rămâne doar
+  (`Parola pentru <utilizator>:`). Textul introdus este ascuns și rămâne doar
   în memorie pe durata rulării.
 - **Opțional (rulări automate):** dacă este setată variabila de mediu
   `PORTAL_PASSWORD`, aceasta este folosită fără a mai întreba:
@@ -117,21 +117,18 @@ Parola **nu este stocată** în cod sau în fișiere.
 ## 5. Configurare
 
 URL-ul portalului, utilizatorul și calea de salvare se cer **interactiv** la
-rulare. Valorile din tabel sunt doar **valorile implicite** (propuse la prompt)
-și pot fi modificate în capul fișierului `export_portal_users.py`:
+rulare (toate obligatorii, fără valori implicite). Comportamentul aplicației
+poate fi ajustat din constantele aflate în capul fișierului
+`export_portal_users.py`:
 
-| Variabilă              | Implicit                                  | Rol                                                        |
-|------------------------|-------------------------------------------|------------------------------------------------------------|
-| `DEFAULT_PORTAL_URL`   | `https://gis.ancpi.ro/portal`             | URL portal propus la prompt                                |
-| `DEFAULT_USERNAME`     | `ginu.popescu`                            | Utilizator propus la prompt                                |
-| `DEFAULT_OUTPUT_PATH`  | `C:\#_LUCRU\Aplicatii\ExportPortalUsers`  | Calea de salvare propusă la prompt                         |
-| `INCLUDE_GROUPS`       | `True`                                    | Include coloana Groups (un apel REST în plus per membru)   |
-| `WRITE_XLSX`           | `True`                                    | Scrie și fișierul Excel                                    |
-| `FILTER_LIKE_ORIGINAL` | `False`                                   | `True` = doar licențe viewer, exclude conturile `esri_*`   |
-| `INSECURE_SSL`         | `False`                                   | `True` = ignoră verificarea certificatului TLS             |
-| `PAGE_SIZE`            | `100`                                     | Membri per apel REST                                       |
+| Variabilă              | Implicit  | Rol                                                        |
+|------------------------|-----------|------------------------------------------------------------|
+| `INCLUDE_GROUPS`       | `True`    | Include coloana Groups (un apel REST în plus per membru)   |
+| `WRITE_XLSX`           | `True`    | Scrie și fișierul Excel                                    |
+| `FILTER_LIKE_ORIGINAL` | `False`   | `True` = doar licențe viewer, exclude conturile `esri_*`   |
+| `INSECURE_SSL`         | `False`   | `True` = ignoră verificarea certificatului TLS             |
+| `PAGE_SIZE`            | `100`     | Membri per apel REST                                       |
 
-> La prompt, apasă **Enter** pentru a accepta valoarea implicită afișată.
 > `INCLUDE_GROUPS = False` accelerează semnificativ rularea (elimină un apel
 > REST pentru fiecare membru).
 

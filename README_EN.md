@@ -1,4 +1,4 @@
-# Export Portal Users – ANCPI
+# Export Portal Users
 
 Application that extracts the **complete list of members** of an ArcGIS
 Enterprise / Portal and saves it to **CSV** and **Excel (.xlsx)**.
@@ -48,7 +48,7 @@ pane), auto-filter on columns and auto-adjusted column widths.
   without Python installed.
 - For running from source: **Python 3.9+** (tested on 3.14.5) and the
   `openpyxl` package (installed automatically by `start.bat`).
-- Network access to the portal: `https://gis.ancpi.ro/portal`.
+- Network access to the ArcGIS Enterprise GIS portal.
 - A portal account with permission to list the organization's members.
 
 ---
@@ -56,10 +56,10 @@ pane), auto-filter on columns and auto-adjusted column widths.
 ## 3. How to run
 
 At startup, the application interactively asks for four pieces of information
-(press **Enter** at any prompt to keep the default value shown in brackets):
+(all required, with no default values):
 
-1. **Portal GIS URL** – e.g. `https://gis.ancpi.ro/portal`
-2. **User (username)** – e.g. `ginu.popescu`
+1. **Portal GIS URL** – e.g. `https://<portal>/portal`
+2. **User (username)**
 3. **Password** – not shown while typing, kept in memory only
 4. **Save path** for the CSV and XLSX files
 
@@ -97,7 +97,7 @@ python export_portal_users.py
 The password is **never stored** in code or in files.
 
 - **By default:** the application asks for it interactively at run time
-  (`Parola pentru ginu.popescu:`). The entered text is hidden and kept only in
+  (`Parola pentru <user>:`). The entered text is hidden and kept only in
   memory for the duration of the run.
 - **Optional (automated runs):** if the `PORTAL_PASSWORD` environment variable
   is set, it is used without prompting:
@@ -115,21 +115,17 @@ The password is **never stored** in code or in files.
 ## 5. Configuration
 
 The portal URL, the user and the save path are requested **interactively** at
-run time. The values in the table are only the **defaults** (proposed at the
-prompt) and can be changed at the top of `export_portal_users.py`:
+run time (all required, with no default values). The application's behaviour
+can be adjusted through the constants at the top of `export_portal_users.py`:
 
-| Variable               | Default                                   | Purpose                                                    |
-|------------------------|-------------------------------------------|------------------------------------------------------------|
-| `DEFAULT_PORTAL_URL`   | `https://gis.ancpi.ro/portal`             | Portal URL proposed at the prompt                          |
-| `DEFAULT_USERNAME`     | `ginu.popescu`                            | User proposed at the prompt                                |
-| `DEFAULT_OUTPUT_PATH`  | `C:\#_LUCRU\Aplicatii\ExportPortalUsers`  | Save path proposed at the prompt                           |
-| `INCLUDE_GROUPS`       | `True`                                    | Include the Groups column (one extra REST call per member) |
-| `WRITE_XLSX`           | `True`                                    | Also write the Excel file                                  |
-| `FILTER_LIKE_ORIGINAL` | `False`                                   | `True` = only viewer licenses, exclude `esri_*` accounts   |
-| `INSECURE_SSL`         | `False`                                   | `True` = skip TLS certificate verification                 |
-| `PAGE_SIZE`            | `100`                                     | Members per REST call                                      |
+| Variable               | Default   | Purpose                                                    |
+|------------------------|-----------|------------------------------------------------------------|
+| `INCLUDE_GROUPS`       | `True`    | Include the Groups column (one extra REST call per member) |
+| `WRITE_XLSX`           | `True`    | Also write the Excel file                                  |
+| `FILTER_LIKE_ORIGINAL` | `False`   | `True` = only viewer licenses, exclude `esri_*` accounts   |
+| `INSECURE_SSL`         | `False`   | `True` = skip TLS certificate verification                 |
+| `PAGE_SIZE`            | `100`     | Members per REST call                                      |
 
-> At the prompt, press **Enter** to accept the default shown.
 > `INCLUDE_GROUPS = False` speeds up the run significantly (removes one REST
 > call per member).
 

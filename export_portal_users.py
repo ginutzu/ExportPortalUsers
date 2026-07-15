@@ -29,14 +29,10 @@ import urllib.parse
 import urllib.request
 
 # ---------------------------------------------------------------------------
-# Default connection parameters
+# Connection parameters
 # ---------------------------------------------------------------------------
-# These are only defaults: the portal URL, the username and the output folder
-# are all requested interactively at run time. Press Enter at a prompt to keep
-# the value shown in [square brackets].
-DEFAULT_PORTAL_URL = "https://gis.ancpi.ro/portal"
-DEFAULT_USERNAME = "ginu.popescu"
-DEFAULT_OUTPUT_PATH = r"C:\#_LUCRU\Aplicatii\ExportPortalUsers"
+# The portal URL, the username and the output folder are all requested
+# interactively at run time (no suggested defaults).
 
 # The password is never stored in this file. By default it is requested
 # interactively at run time (input is hidden and kept only in memory).
@@ -48,16 +44,19 @@ PASSWORD_ENV_VAR = "PORTAL_PASSWORD"
 DEFAULT_FILE_STEM = "portal_users"
 
 
-def prompt_with_default(label, default):
-    """Ask the user for a value; empty input keeps the default shown."""
-    try:
-        answer = input("%s [%s]: " % (label, default)).lstrip("﻿").strip()
-    except (EOFError, KeyboardInterrupt):
-        raise RuntimeError("Input cancelled.")
-    # Allow pasting a value wrapped in quotes.
-    if len(answer) >= 2 and answer[0] == answer[-1] and answer[0] in "\"'":
-        answer = answer[1:-1].strip()
-    return answer or default
+def prompt_required(label):
+    """Ask the user for a value, repeating until a non-empty one is entered."""
+    while True:
+        try:
+            answer = input("%s: " % label).lstrip("﻿").strip()
+        except (EOFError, KeyboardInterrupt):
+            raise RuntimeError("Input cancelled.")
+        # Allow pasting a value wrapped in quotes.
+        if len(answer) >= 2 and answer[0] == answer[-1] and answer[0] in "\"'":
+            answer = answer[1:-1].strip()
+        if answer:
+            return answer
+        print("  Valoare obligatorie. Te rog introdu o valoare.")
 
 
 def get_password(uname):
@@ -253,17 +252,15 @@ def write_xlsx(path, rows):
 
 def main():
     print("=" * 60)
-    print("  Export Portal Users - ANCPI")
+    print("  Export Portal Users")
     print("=" * 60)
-    print("Apasa Enter pentru a pastra valoarea implicita din [paranteze].")
     print()
 
     # --- Interactive parameters -----------------------------------------
-    portal_url = prompt_with_default("URL portal GIS", DEFAULT_PORTAL_URL)
-    uname = prompt_with_default("Utilizator (username)", DEFAULT_USERNAME)
+    portal_url = prompt_required("URL portal GIS")
+    uname = prompt_required("Utilizator (username)")
     pw = get_password(uname)
-    out_path = prompt_with_default(
-        "Calea de salvare a fisierelor CSV si XLSX", DEFAULT_OUTPUT_PATH)
+    out_path = prompt_required("Calea de salvare a fisierelor CSV si XLSX")
     print()
 
     base = portal_url.rstrip("/")

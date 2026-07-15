@@ -1,12 +1,12 @@
 @echo off
 setlocal
-title Export Portal Users - ANCPI
+title Export Portal Users
 
 rem Always run from the folder where this .bat lives.
 cd /d "%~dp0"
 
 echo ============================================================
-echo   Export Portal Users - ANCPI
+echo   Export Portal Users
 echo ============================================================
 echo.
 
